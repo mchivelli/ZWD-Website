@@ -1,0 +1,270 @@
+*{
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Ensure full viewport height */
+    overflow: hidden; /* Prevent double scrollbars */
+}
+
+body{
+    background-color: aliceblue;
+}
+
+p, h1, h2{
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+
+.europa-light{
+    font-family: "europa", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.europa-regular{
+    font-family: "europa", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.europa-bold{
+    font-family: "europa", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+
+
+.flexbox {
+    display: flex;
+    height: 100vh;
+}
+
+#user_sidebar {
+    width: 300px;
+    height: 100vh;
+    overflow: hidden; 
+    position: sticky; 
+    top: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding:50px;
+
+    box-shadow: 4px 0 10px -2px rgba(37, 43, 123, 0.3); 
+
+    background-color: white;
+
+    margin-right:25px;
+}
+
+.user_bmi-logo{
+    width:100%;
+    height:auto;
+}
+
+.user_bmi-logo img{
+    width:100%;
+    height:auto;
+}
+
+.profile{
+    width:100%;
+    height:auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile_picture{
+    width:150px;
+    height:150px;
+    background-image: url("../img/placeholder.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 100%;
+    margin-top:50px;
+    margin-bottom:50px;
+}
+
+.username{
+    text-align: center;
+    height:auto;
+}
+
+.user_info {
+    width: 100%;
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px; 
+}
+
+.user_option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor; 
+}
+
+
+.footer{
+    width:100%;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+#main_board {
+    flex: 1;
+    display: flex;
+    height: 100vh;
+}
+
+.column-scroll {
+    flex: 1;
+    overflow-y: auto;
+    height: 100vh;
+    position: relative;
+
+}
+
+.news{
+    height: auto; 
+    /*min-height: 150vh; /* Just for demonstration */
+    padding: 0 25px 50px 25px;   
+}
+
+
+#long_term_wrapper{ 
+     
+}
+
+#news_wrapper{ 
+    
+}
+
+
+
+#long_term {
+    
+}
+
+
+
+.funktion{
+    width:100%;
+    min-height:200px;
+
+    margin:25px 0px;
+    border-radius: 20px;
+
+    background-color:white;
+
+    padding:25px;
+}
+
+.fixed-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    padding: 0 50px;
+    background-color:white;
+    z-index: -10;
+    margin: 0;
+
+    display:flex;
+    align-items: center;
+}
+
+.fixed_header h1{
+    margin: 0 50px;
+}
+
+.scroll-content {
+    position: absolute;
+    top: 100px; 
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    padding: 0; 
+    box-sizing: border-box;
+}
+
+#food_poll{
+    display:flex;
+    flex-direction: column;
+}
+
+.food_suggestions{
+    flex-grow:1;
+
+}
+
+.food_suggestion{
+    margin:25px 0;
+}
+
+.food_nav{
+    display:flex;
+    
+
+    justify-content: space-around;
+    gap:25px;
+
+    max-width:100%;
+    flex-wrap: wrap;
+  
+}
+
+.food_nav div{
+    width:auto;
+    height:100%;
+
+    border-radius:20px;
+    background-color:aliceblue;
+
+    display: flex;
+    align-items: start;    
+    justify-content: center;
+    flex-grow:1;
+
+    padding:8px 12px;
+    
+    
+
+}
+
+.food_nav span{
+    line-height:16px;
+    
+
+}
+
+
+.icon_text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}

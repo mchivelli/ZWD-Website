@@ -8,149 +8,182 @@ import {
   IconToolsKitchen2,
   IconChevronRight,
   IconTrendingUp,
-  IconShield
+  IconSparkles
 } from '@tabler/icons-react'
+import { useTheme } from '@/contexts/ThemeContext'
 
 export default function Dashboard() {
+  const { theme } = useTheme()
+  const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+
   return (
-    <div className="space-y-12">
-      {/* Hero Section */}
+    <div className="space-y-8 bg-background text-foreground">
+      {/* Hero Section - Modern Theme */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-8 md:p-12 text-white"
+        className="relative rounded-2xl p-6 md:p-8 mb-8 overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.05)]"
+        style={{ backgroundColor: isDark ? '#374151' : '#ffffff' }}
       >
-        <div className="absolute inset-0 bg-black/10" />
-        <div className="relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex items-center gap-3 mb-6"
-          >
-            <div className="flex items-center justify-center w-12 h-12 bg-white/20 rounded-full backdrop-blur-sm">
-              <IconShield className="w-6 h-6" />
-            </div>
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold">
-                Willkommen im Zivildienst Portal
-              </h1>
-              <p className="text-blue-100 mt-2 text-lg">
-                Dein digitaler Begleiter für einen erfolgreichen Zivildienst
-              </p>
-            </div>
-          </motion.div>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-blue-50 text-lg mb-8 max-w-2xl"
-          >
-            Verwalte deinen Zivildienst effizient, bleibe mit deiner Gemeinschaft verbunden 
-            und nutze alle verfügbaren Ressourcen optimal.
-          </motion.p>
+        <div className="dark:hidden">
+            {/* Light mode decorative elements */}
+            <div className="absolute top-0 right-0 w-48 h-48 bg-gray-50 rounded-full -translate-y-24 translate-x-24" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-gray-50 rounded-full translate-y-16 -translate-x-16" />
+        </div>
+        <div className="hidden dark:block">
+            {/* Dark mode decorative elements */}
+            <div className="absolute top-0 right-0 w-48 h-48 bg-gray-700/50 rounded-full -translate-y-24 translate-x-24" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-gray-700/50 rounded-full translate-y-16 -translate-x-16" />
+        </div>
+        <div className="relative z-10 flex flex-col justify-between h-full max-w-4xl">
+          <div>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-3xl md:text-4xl font-bold mb-4"
+              style={{ color: isDark ? '#f3f4f6' : '#111827' }}
+            >
+              Willkommen im Zivildienst Portal
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-lg mb-8 max-w-2xl"
+              style={{ color: isDark ? '#d1d5db' : '#6b7280' }}
+            >
+              Verwalte deinen Zivildienst effizient, bleibe mit deiner Gemeinschaft verbunden 
+              und nutze alle verfügbaren Ressourcen optimal.
+            </motion.p>
+          </div>
           
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4"
+            className="flex flex-col sm:flex-row gap-4 mt-4"
           >
-            <button className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors flex items-center gap-2 group">
+            <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center gap-2 group">
+              <IconSparkles className="w-4 h-4" />
               Schnellstart
               <IconChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="border border-white/30 text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors backdrop-blur-sm">
+            <button className="border border-border text-foreground px-4 py-2 rounded-lg font-semibold hover:bg-muted transition-colors">
               Hilfe & Support
             </button>
           </motion.div>
         </div>
         
-        {/* Background decoration */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-24 -translate-x-24" />
+        {/* BMI Logo on the right side */}
+        <div className="absolute top-0 right-0 bottom-0 w-1/4 md:w-1/5 flex items-center justify-center p-4">
+          <img 
+            src="/images/bmi_logo_borderless.svg" 
+            alt="BMI Logo" 
+            className="w-full h-full object-contain opacity-80"
+          />
+        </div>
       </motion.div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards - Responsive to theme */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
       >
-        {[
-          { 
-            title: "Aktive Tickets", 
-            value: "3", 
-            icon: IconHelp,
-            color: "from-red-500 to-pink-600", 
-            bgColor: "bg-red-50 dark:bg-red-900/20",
-            href: "/helpdesk" 
-          },
-          { 
-            title: "Neue Nachrichten", 
-            value: "7", 
-            icon: IconMessages,
-            color: "from-blue-500 to-cyan-600", 
-            bgColor: "bg-blue-50 dark:bg-blue-900/20",
-            href: "/blackboard" 
-          },
-          { 
-            title: "Anstehende Termine", 
-            value: "2", 
-            icon: IconCalendar,
-            color: "from-green-500 to-emerald-600", 
-            bgColor: "bg-green-50 dark:bg-green-900/20",
-            href: "/reminders" 
-          },
-          { 
-            title: "Offene Abstimmungen", 
-            value: "1", 
-            icon: IconToolsKitchen2,
-            color: "from-yellow-500 to-orange-600", 
-            bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
-            href: "/food-votes" 
-          },
-        ].map((card, idx) => {
-          const IconComponent = card.icon;
-          return (
-            <motion.a
-              key={idx}
-              href={card.href}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 * idx }}
-              className={cn(
-                "group relative p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 transition-all duration-300 hover:shadow-lg hover:shadow-neutral-200/50 dark:hover:shadow-neutral-800/50 hover:-translate-y-1 cursor-pointer overflow-hidden",
-                card.bgColor
-              )}
-            >
-              <div className="relative z-10">
-                <div className="flex items-center justify-between mb-4">
-                  <div className={cn(
-                    "flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-r",
-                    card.color
-                  )}>
-                    <IconComponent className="w-6 h-6 text-white" />
-                  </div>
-                  <IconTrendingUp className="w-4 h-4 text-neutral-400 group-hover:text-neutral-600 dark:group-hover:text-neutral-300 transition-colors" />
-                </div>
-                <h3 className="text-sm font-medium text-neutral-600 dark:text-neutral-400 mb-2">
-                  {card.title}
-                </h3>
-                <p className="text-3xl font-bold text-neutral-800 dark:text-neutral-200">
-                  {card.value}
-                </p>
+        {/* Card 1: Aktive Tickets - RED ACCENT */}
+        <motion.a 
+          href="/helpdesk" 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.5, delay: 0.1 }} 
+          className="group relative p-6 rounded-2xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer overflow-hidden shadow-sm"
+          style={{ backgroundColor: isDark ? '#374151' : '#fef2f2' }}
+        >
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl" style={{ backgroundColor: isDark ? '#4b5563' : '#fee2e2' }}>
+                <IconHelp className="w-6 h-6" style={{ color: isDark ? '#ef4444' : '#dc2626' }} />
               </div>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-            </motion.a>
-          );
-        })}
+              <IconTrendingUp className="w-4 h-4" style={{ color: isDark ? '#9ca3af' : '#9ca3af' }} />
+            </div>
+            <h3 className="text-sm font-medium mb-2" style={{ color: isDark ? '#d1d5db' : '#374151' }}>Aktive Tickets</h3>
+            <p className="text-3xl font-bold" style={{ color: isDark ? '#ef4444' : '#dc2626' }}>3</p>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+        </motion.a>
+        
+        {/* Card 2: Neue Nachrichten - BLUE ACCENT */}
+        <motion.a 
+          href="/blackboard" 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.5, delay: 0.2 }} 
+          className="group relative p-6 rounded-2xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer overflow-hidden shadow-sm"
+          style={{ backgroundColor: isDark ? '#374151' : '#eff6ff' }}
+        >
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl" style={{ backgroundColor: isDark ? '#4b5563' : '#dbeafe' }}>
+                <IconMessages className="w-6 h-6" style={{ color: isDark ? '#3b82f6' : '#2563eb' }} />
+              </div>
+              <IconTrendingUp className="w-4 h-4" style={{ color: isDark ? '#9ca3af' : '#9ca3af' }} />
+            </div>
+            <h3 className="text-sm font-medium mb-2" style={{ color: isDark ? '#d1d5db' : '#374151' }}>Neue Nachrichten</h3>
+            <p className="text-3xl font-bold" style={{ color: isDark ? '#3b82f6' : '#2563eb' }}>7</p>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+        </motion.a>
+        
+        {/* Card 3: Anstehende Termine - GREEN ACCENT */}
+        <motion.a 
+          href="/reminders" 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.5, delay: 0.3 }} 
+          className="group relative p-6 rounded-2xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer overflow-hidden shadow-sm"
+          style={{ backgroundColor: isDark ? '#374151' : '#f0fdf4' }}
+        >
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl" style={{ backgroundColor: isDark ? '#4b5563' : '#dcfce7' }}>
+                <IconCalendar className="w-6 h-6" style={{ color: isDark ? '#22c55e' : '#16a34a' }} />
+              </div>
+              <IconTrendingUp className="w-4 h-4" style={{ color: isDark ? '#9ca3af' : '#9ca3af' }} />
+            </div>
+            <h3 className="text-sm font-medium mb-2" style={{ color: isDark ? '#d1d5db' : '#374151' }}>Anstehende Termine</h3>
+            <p className="text-3xl font-bold" style={{ color: isDark ? '#22c55e' : '#16a34a' }}>2</p>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+        </motion.a>
+        
+        {/* Card 4: Offene Abstimmungen - YELLOW ACCENT */}
+        <motion.a 
+          href="/food-votes" 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.5, delay: 0.4 }} 
+          className="group relative p-6 rounded-2xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer overflow-hidden shadow-sm"
+          style={{ backgroundColor: isDark ? '#374151' : '#fefce8' }}
+        >
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl" style={{ backgroundColor: isDark ? '#4b5563' : '#fef3c7' }}>
+                <IconToolsKitchen2 className="w-6 h-6" style={{ color: isDark ? '#eab308' : '#ca8a04' }} />
+              </div>
+              <IconTrendingUp className="w-4 h-4" style={{ color: isDark ? '#9ca3af' : '#9ca3af' }} />
+            </div>
+            <h3 className="text-sm font-medium mb-2" style={{ color: isDark ? '#d1d5db' : '#374151' }}>Offene Abstimmungen</h3>
+            <p className="text-3xl font-bold" style={{ color: isDark ? '#eab308' : '#ca8a04' }}>1</p>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+        </motion.a>
       </motion.div>
       
-      {/* Content Grid */}
+      {/* Content Grid - Responsive to theme */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -158,12 +191,12 @@ export default function Dashboard() {
         className="grid grid-cols-1 lg:grid-cols-2 gap-8"
       >
         {/* Recent Messages */}
-        <div className="group p-6 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:shadow-lg transition-all duration-300">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="flex items-center justify-center w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-              <IconMessages className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+        <div className="group p-8 rounded-2xl hover:shadow-xl transition-all duration-300 shadow-sm" style={{ backgroundColor: isDark ? '#374151' : '#ffffff' }}>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center justify-center w-12 h-12 rounded-xl" style={{ backgroundColor: isDark ? '#4b5563' : '#dbeafe' }}>
+              <IconMessages className="w-6 h-6" style={{ color: isDark ? '#3b82f6' : '#2563eb' }} />
             </div>
-            <h2 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200">
+            <h2 className="text-xl font-semibold" style={{ color: isDark ? '#f3f4f6' : '#111827' }}>
               Neueste Einträge - Schwarzes Brett
             </h2>
           </div>
@@ -178,35 +211,36 @@ export default function Dashboard() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: idx * 0.1 }}
-                className={cn(
-                  "p-4 rounded-lg border-l-4 transition-all duration-200 hover:shadow-md",
-                  entry.priority === 'high' ? 'bg-red-50 dark:bg-red-900/20 border-red-400' :
-                  entry.priority === 'medium' ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-400' :
-                  'bg-green-50 dark:bg-green-900/20 border-green-400'
-                )}
+                className="p-4 rounded-xl border-l-4 transition-all duration-200 hover:shadow-md cursor-pointer"
+                style={{
+                  backgroundColor: isDark ? '#4b5563' : 
+                    (entry.priority === 'high' ? '#fef2f2' : 
+                     entry.priority === 'medium' ? '#fefce8' : '#f0fdf4'),
+                  borderLeftColor: entry.priority === 'high' ? '#f87171' : 
+                                  entry.priority === 'medium' ? '#facc15' : '#4ade80'
+                }}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200 mb-1">
+                    <p className="text-sm font-medium mb-1" style={{ color: isDark ? '#f3f4f6' : '#111827' }}>
                       {entry.text}
                     </p>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                    <p className="text-xs" style={{ color: isDark ? '#d1d5db' : '#6b7280' }}>
                       {entry.time}
                     </p>
                   </div>
-                  <div className={cn(
-                    "w-2 h-2 rounded-full ml-3 mt-2 flex-shrink-0",
-                    entry.priority === 'high' ? 'bg-red-400' :
-                    entry.priority === 'medium' ? 'bg-yellow-400' :
-                    'bg-green-400'
-                  )} />
+                  <div className="w-2 h-2 rounded-full ml-3 mt-2 flex-shrink-0" style={{
+                    backgroundColor: entry.priority === 'high' ? '#f87171' :
+                                    entry.priority === 'medium' ? '#facc15' : '#4ade80'
+                  }} />
                 </div>
               </motion.div>
             ))}
           </div>
           <a
             href="/blackboard"
-            className="group inline-flex items-center gap-2 mt-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="group inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-xl font-medium shadow-sm transition-colors"
+            style={{ backgroundColor: '#2563eb', color: '#ffffff' }}
           >
             Alle Nachrichten anzeigen
             <IconChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -214,12 +248,12 @@ export default function Dashboard() {
         </div>
         
         {/* Upcoming Events */}
-        <div className="group p-6 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:shadow-lg transition-all duration-300">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="flex items-center justify-center w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg">
-              <IconCalendar className="w-5 h-5 text-green-600 dark:text-green-400" />
+        <div className="group p-8 rounded-2xl hover:shadow-xl transition-all duration-300 shadow-sm" style={{ backgroundColor: isDark ? '#374151' : '#ffffff' }}>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center justify-center w-12 h-12 rounded-xl" style={{ backgroundColor: isDark ? '#4b5563' : '#dcfce7' }}>
+              <IconCalendar className="w-6 h-6" style={{ color: isDark ? '#22c55e' : '#16a34a' }} />
             </div>
-            <h2 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200">
+            <h2 className="text-xl font-semibold" style={{ color: isDark ? '#f3f4f6' : '#111827' }}>
               Kommende Termine
             </h2>
           </div>
@@ -234,36 +268,37 @@ export default function Dashboard() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: idx * 0.1 }}
-                className={cn(
-                  "group/item p-4 rounded-lg border-l-4 transition-all duration-200 hover:shadow-md cursor-pointer",
-                  event.urgent ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-400' :
-                  'bg-blue-50 dark:bg-blue-900/20 border-blue-400'
-                )}
+                className="group/item p-4 rounded-xl border-l-4 transition-all duration-200 hover:shadow-md cursor-pointer"
+                style={{
+                  backgroundColor: isDark ? '#4b5563' : (event.urgent ? '#fef2f2' : '#eff6ff'),
+                  borderLeftColor: event.urgent ? '#fb923c' : '#60a5fa'
+                }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
+                      <p className="text-sm font-medium" style={{ color: isDark ? '#f3f4f6' : '#111827' }}>
                         {event.title}
                       </p>
                       {event.urgent && (
-                        <span className="px-2 py-1 text-xs bg-orange-200 dark:bg-orange-800 text-orange-800 dark:text-orange-200 rounded-full">
+                        <span className="px-2 py-1 text-xs rounded-full font-medium" style={{ backgroundColor: '#fed7aa', color: '#c2410c' }}>
                           Dringend
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
+                    <p className="text-xs mt-1" style={{ color: isDark ? '#d1d5db' : '#6b7280' }}>
                       {event.date}
                     </p>
                   </div>
-                  <IconBell className="w-4 h-4 text-neutral-400 group-hover/item:text-neutral-600 dark:group-hover/item:text-neutral-300 transition-colors" />
+                  <IconBell className="w-4 h-4" style={{ color: isDark ? '#d1d5db' : '#9ca3af' }} />
                 </div>
               </motion.div>
             ))}
           </div>
           <a
             href="/reminders"
-            className="group inline-flex items-center gap-2 mt-6 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+            className="group inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-xl font-medium shadow-sm transition-colors"
+            style={{ backgroundColor: '#16a34a', color: '#ffffff' }}
           >
             Alle Termine anzeigen
             <IconChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

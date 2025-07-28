@@ -1,113 +1,117 @@
 @import "tailwindcss";
+@import url('https://use.typekit.net/shu5nuc.css');
 
-@theme {
-  --font-family-sans: 'Inter', system-ui, sans-serif;
+/* Europa font family from dashboardSTYLEONLY */
+@import url('https://use.typekit.net/shu5nuc.css');
+
+/* Dashboard-inspired color scheme */
+:root {
+  --font-family-sans: 'europa', system-ui, sans-serif;
   --font-family-mono: 'JetBrains Mono', monospace;
   
-  /* Design tokens */
-  --color-background: 0 0% 100%;
-  --color-foreground: 222.2 84% 4.9%;
-  --color-card: 0 0% 100%;
-  --color-card-foreground: 222.2 84% 4.9%;
-  --color-popover: 0 0% 100%;
-  --color-popover-foreground: 222.2 84% 4.9%;
-  --color-primary: 222.2 47.4% 11.2%;
-  --color-primary-foreground: 210 40% 98%;
-  --color-secondary: 210 40% 96%;
-  --color-secondary-foreground: 222.2 47.4% 11.2%;
-  --color-muted: 210 40% 96%;
-  --color-muted-foreground: 215.4 16.3% 46.9%;
-  --color-accent: 210 40% 96%;
-  --color-accent-foreground: 222.2 47.4% 11.2%;
+  --color-background: 243 244 246; /* light gray background like in image */
+  --color-foreground: 17 24 39; /* dark text */
+  --color-card: 255 255 255; /* pure white cards */
+  --color-card-foreground: 17 24 39; /* dark text on cards */
+  --color-popover: 255 255 255;
+  --color-popover-foreground: 17 24 39;
+  --color-primary: 37 43 123; /* BMI-inspired primary color */
+  --color-primary-foreground: 255 255 255;
+  --color-secondary: 243 244 246; /* light gray for secondary */
+  --color-secondary-foreground: 17 24 39;
+  --color-muted: 249 250 251; /* very light gray for muted backgrounds */
+  --color-muted-foreground: 107 114 128; /* medium gray text */
+  --color-accent: 243 244 246; /* light gray accent */
+  --color-accent-foreground: 17 24 39;
   --color-destructive: 0 84.2% 60.2%;
-  --color-destructive-foreground: 210 40% 98%;
-  --color-border: 214.3 31.8% 91.4%;
-  --color-input: 214.3 31.8% 91.4%;
-  --color-ring: 222.2 84% 4.9%;
-  
-  /* Dark mode colors */
-  --color-background-dark: 222.2 84% 4.9%;
-  --color-foreground-dark: 210 40% 98%;
-  --color-card-dark: 222.2 84% 4.9%;
-  --color-card-foreground-dark: 210 40% 98%;
-  --color-popover-dark: 222.2 84% 4.9%;
-  --color-popover-foreground-dark: 210 40% 98%;
-  --color-primary-dark: 210 40% 98%;
-  --color-primary-foreground-dark: 222.2 47.4% 11.2%;
-  --color-secondary-dark: 217.2 32.6% 17.5%;
-  --color-secondary-foreground-dark: 210 40% 98%;
-  --color-muted-dark: 217.2 32.6% 17.5%;
-  --color-muted-foreground-dark: 215 20.2% 65.1%;
-  --color-accent-dark: 217.2 32.6% 17.5%;
-  --color-accent-foreground-dark: 210 40% 98%;
-  --color-destructive-dark: 0 62.8% 30.6%;
-  --color-destructive-foreground-dark: 210 40% 98%;
-  --color-border-dark: 217.2 32.6% 17.5%;
-  --color-input-dark: 217.2 32.6% 17.5%;
-  --color-ring-dark: 212.7 26.8% 83.9%;
-  
+  --color-destructive-foreground: 255 255 255;
+  --color-border: 229 231 235; /* light border */
+  --color-input: 249 250 251; /* light input background */
+  --color-ring: 37 43 123;
+  --color-chart-1: 12 76% 61%;
+  --color-chart-2: 173 58% 39%;
+  --color-chart-3: 197 37% 24%;
+  --color-chart-4: 43 74% 66%;
+  --color-chart-5: 27 87% 67%;
+
+  /* Radius */
   --radius: 0.5rem;
+  
+  /* Dark mode colors - unchanged */
+  --color-background-dark: 17 24 39;
+  --color-foreground-dark: 243 244 246;
+  --color-card-dark: 31 41 55;
+  --color-card-foreground-dark: 243 244 246;
+  --color-popover-dark: 31 41 55;
+  --color-popover-foreground-dark: 243 244 246;
+  --color-primary-dark: 59 130 246;
+  --color-primary-foreground-dark: 17 24 39;
+  --color-secondary-dark: 55 65 81;
+  --color-secondary-foreground-dark: 243 244 246;
+  --color-muted-dark: 55 65 81;
+  --color-muted-foreground-dark: 156 163 175;
+  --color-accent-dark: 55 65 81;
+  --color-accent-foreground-dark: 243 244 246;
+  --color-destructive-dark: 239 68 68;
+  --color-destructive-foreground-dark: 255 255 255;
+  --color-border-dark: 75 85 99;
+  --color-input-dark: 55 65 81;
+  --color-ring-dark: 59 130 246;
 }
 
 @layer base {
   :root {
-    --background: var(--color-background);
-    --foreground: var(--color-foreground);
-    --card: var(--color-card);
-    --card-foreground: var(--color-card-foreground);
-    --popover: var(--color-popover);
-    --popover-foreground: var(--color-popover-foreground);
-    --primary: var(--color-primary);
-    --primary-foreground: var(--color-primary-foreground);
-    --secondary: var(--color-secondary);
-    --secondary-foreground: var(--color-secondary-foreground);
-    --muted: var(--color-muted);
-    --muted-foreground: var(--color-muted-foreground);
-    --accent: var(--color-accent);
-    --accent-foreground: var(--color-accent-foreground);
-    --destructive: var(--color-destructive);
-    --destructive-foreground: var(--color-destructive-foreground);
-    --border: var(--color-border);
-    --input: var(--color-input);
-    --ring: var(--color-ring);
+    --background: hsl(var(--color-background));
+    --foreground: hsl(var(--color-foreground));
+    --card: hsl(var(--color-card));
+    --card-foreground: hsl(var(--color-card-foreground));
+    --popover: hsl(var(--color-popover));
+    --popover-foreground: hsl(var(--color-popover-foreground));
+    --primary: hsl(var(--color-primary));
+    --primary-foreground: hsl(var(--color-primary-foreground));
+    --secondary: hsl(var(--color-secondary));
+    --secondary-foreground: hsl(var(--color-secondary-foreground));
+    --muted: hsl(var(--color-muted));
+    --muted-foreground: hsl(var(--color-muted-foreground));
+    --accent: hsl(var(--color-accent));
+    --accent-foreground: hsl(var(--color-accent-foreground));
+    --destructive: hsl(var(--color-destructive));
+    --destructive-foreground: hsl(var(--color-destructive-foreground));
+    --border: hsl(var(--color-border));
+    --input: hsl(var(--color-input));
+    --ring: hsl(var(--color-ring));
   }
 
   .dark {
-    --background: var(--color-background-dark);
-    --foreground: var(--color-foreground-dark);
-    --card: var(--color-card-dark);
-    --card-foreground: var(--color-card-foreground-dark);
-    --popover: var(--color-popover-dark);
-    --popover-foreground: var(--color-popover-foreground-dark);
-    --primary: var(--color-primary-dark);
-    --primary-foreground: var(--color-primary-foreground-dark);
-    --secondary: var(--color-secondary-dark);
-    --secondary-foreground: var(--color-secondary-foreground-dark);
-    --muted: var(--color-muted-dark);
-    --muted-foreground: var(--color-muted-foreground-dark);
-    --accent: var(--color-accent-dark);
-    --accent-foreground: var(--color-accent-foreground-dark);
-    --destructive: var(--color-destructive-dark);
-    --destructive-foreground: var(--color-destructive-foreground-dark);
-    --border: var(--color-border-dark);
-    --input: var(--color-input-dark);
-    --ring: var(--color-ring-dark);
+    --background: hsl(var(--color-background-dark));
+    --foreground: hsl(var(--color-foreground-dark));
+    --card: hsl(var(--color-card-dark));
+    --card-foreground: hsl(var(--color-card-foreground-dark));
+    --popover: hsl(var(--color-popover-dark));
+    --popover-foreground: hsl(var(--color-popover-foreground-dark));
+    --primary: hsl(var(--color-primary-dark));
+    --primary-foreground: hsl(var(--color-primary-foreground-dark));
+    --secondary: hsl(var(--color-secondary-dark));
+    --secondary-foreground: hsl(var(--color-secondary-foreground-dark));
+    --muted: hsl(var(--color-muted-dark));
+    --muted-foreground: hsl(var(--color-muted-foreground-dark));
+    --accent: hsl(var(--color-accent-dark));
+    --accent-foreground: hsl(var(--color-accent-foreground-dark));
+    --destructive: hsl(var(--color-destructive-dark));
+    --destructive-foreground: hsl(var(--color-destructive-foreground-dark));
+    --border: hsl(var(--color-border-dark));
+    --input: hsl(var(--color-input-dark));
+    --ring: hsl(var(--color-ring-dark));
+    color-scheme: dark;
   }
 
   * {
     border-color: hsl(var(--border));
   }
-
+  
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     font-feature-settings: "rlig" 1, "calt" 1;
-  }
-}
-
-@layer base {
-  body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
   }
 }

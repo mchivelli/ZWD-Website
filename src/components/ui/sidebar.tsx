@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 
 interface Links {
@@ -88,7 +89,7 @@ export const DesktopSidebar = ({
     <>
       <motion.div
         className={cn(
-          "h-full px-4 py-4 hidden  md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] shrink-0",
+          "h-full px-4 py-4 hidden  md:flex md:flex-col bg-card w-[300px] shrink-0",
           className
         )}
         animate={{
@@ -114,13 +115,13 @@ export const MobileSidebar = ({
     <>
       <div
         className={cn(
-          "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
+          "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-card w-full"
         )}
         {...props}
       >
         <div className="flex justify-end z-20 w-full">
           <IconMenu2
-            className="text-neutral-800 dark:text-neutral-200"
+            className="text-foreground"
             onClick={() => setOpen(!open)}
           />
         </div>
@@ -135,12 +136,12 @@ export const MobileSidebar = ({
                 ease: "easeInOut",
               }}
               className={cn(
-                "fixed h-full w-full inset-0 bg-white dark:bg-neutral-900 p-10 z-[100] flex flex-col justify-between",
+                "fixed h-full w-full inset-0 bg-card p-10 z-[100] flex flex-col justify-between",
                 className
               )}
             >
               <div
-                className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200"
+                className="absolute right-10 top-10 z-50 text-foreground"
                 onClick={() => setOpen(!open)}
               >
                 <IconX />
@@ -163,26 +164,69 @@ export const SidebarLink = ({
   className?: string;
 }) => {
   const { open, animate } = useSidebar();
+  const location = useLocation();
+  const isActive = location.pathname === link.href;
+  
   return (
-    <a
-      href={link.href}
+    <Link
+      to={link.href}
       className={cn(
-        "flex items-center justify-start gap-2  group/sidebar py-2",
+        "flex items-center justify-start gap-2 group/sidebar py-3 px-3 rounded-xl transition-all duration-300 relative overflow-hidden",
+        isActive 
+          ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 shadow-md" 
+          : "hover:bg-muted text-muted-foreground hover:text-foreground",
         className
       )}
       {...props}
     >
-      {link.icon}
+      {/* Active indicator */}
+      {isActive && (
+        <motion.div
+          className="absolute left-0 top-0 bottom-0 w-1 bg-blue-600 dark:bg-blue-400 rounded-r-full"
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        />
+      )}
 
+      {/* Hover background effect */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/5 to-blue-500/0 rounded-xl"
+        initial={{ x: "-100%" }}
+        whileHover={{ x: "100%" }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+      />
+
+      {/* Icon container */}
+      <motion.div
+        className="relative z-10"
+        whileHover={{ scale: 1.1, rotate: isActive ? 0 : 5 }}
+        transition={{ duration: 0.2 }}
+      >
+        {link.icon}
+      </motion.div>
+
+      {/* Text with enhanced animations */}
       <motion.span
         animate={{
           display: animate ? (open ? "inline-block" : "none") : "inline-block",
           opacity: animate ? (open ? 1 : 0) : 1,
+          x: animate ? (open ? 0 : -10) : 0,
         }}
-        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        className="text-sm font-medium whitespace-pre inline-block !p-0 !m-0 relative z-10 group-hover/sidebar:translate-x-1 transition-transform duration-200"
       >
         {link.label}
       </motion.span>
-    </a>
+
+      {/* Active pulse effect */}
+      {isActive && (
+        <motion.div
+          className="absolute inset-0 bg-blue-500/10 rounded-xl"
+          animate={{ scale: [1, 1.02, 1] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        />
+      )}
+    </Link>
   );
 };

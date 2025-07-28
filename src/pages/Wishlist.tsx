@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { IconPlus, IconCheck, IconX, IconHeart, IconShoppingCart, IconUser, IconCalendar } from '@tabler/icons-react'
+import { Button } from '@/components/ui/stateful-button'
+import { useAuth } from '@/contexts/AuthContext'
+import { IconPlus, IconCheck, IconX, IconHeart, IconShoppingCart, IconUser, IconCalendar, IconEye } from '@tabler/icons-react'
 
 interface WishlistItem {
   id: string
@@ -14,9 +16,12 @@ interface WishlistItem {
   createdAt: string
   fulfilledAt?: string
   rejectedReason?: string
+  isNew?: boolean
+  viewedBy: Record<string, string> // userId -> timestamp
 }
 
 export default function Wishlist() {
+  const { user } = useAuth()
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([
     {
       id: '1',
@@ -29,7 +34,9 @@ export default function Wishlist() {
       status: 'fulfilled',
       estimatedCost: '300-500€',
       createdAt: '2024-07-01',
-      fulfilledAt: '2024-07-15'
+      fulfilledAt: '2024-07-15',
+      isNew: false,
+      viewedBy: { [user?.id || '']: '2024-07-15T10:00:00' }
     },
     {
       id: '2',
@@ -41,7 +48,9 @@ export default function Wishlist() {
       hasUserVoted: false,
       status: 'approved',
       estimatedCost: '150-250€ pro Stuhl',
-      createdAt: '2024-07-05'
+      createdAt: '2024-07-05',
+      isNew: true,
+      viewedBy: {}
     },
     {
       id: '3',
@@ -49,49 +58,101 @@ export default function Wishlist() {
       description: 'Ein Tischkicker würde die Pausen viel unterhaltsamer machen',
       category: 'Freizeit',
       author: 'Tom Weber',
-      upvotes: 15,
-      hasUserVoted: true,
-      status: 'pending',
-      estimatedCost: '400-600€',
-      createdAt: '2024-07-10'
-    },
-    {
-      id: '4',
-      title: 'Bessere Beleuchtung',
-      description: 'LED-Lampen für bessere Beleuchtung in den Arbeitsräumen',
-      category: 'Büro',
-      author: 'Anna Müller',
       upvotes: 12,
       hasUserVoted: false,
       status: 'pending',
-      estimatedCost: '100-200€',
-      createdAt: '2024-07-12'
+      estimatedCost: '400-600€',
+      createdAt: '2024-07-10',
+      isNew: true,
+      viewedBy: {}
+    },
+    {
+      id: '4',
+      title: 'Pflanzen für das Büro',
+      description: 'Einige Grünpflanzen würden die Arbeitsatmosphäre verbessern',
+      category: 'Büro',
+      author: 'Anna Müller',
+      upvotes: 8,
+      hasUserVoted: false,
+      status: 'approved',
+      estimatedCost: '50-100€',
+      createdAt: '2024-07-12',
+      isNew: false,
+      viewedBy: { [user?.id || '']: '2024-07-12T14:00:00' }
     },
     {
       id: '5',
-      title: 'Klimaanlage',
-      description: 'Eine Klimaanlage für die heißen Sommertage',
-      category: 'Komfort',
+      title: 'Besseres WLAN',
+      description: 'Das aktuelle WLAN ist zu langsam für unsere Bedürfnisse',
+      category: 'Technik',
       author: 'Sarah Klein',
-      upvotes: 8,
-      hasUserVoted: false,
+      upvotes: 25,
+      hasUserVoted: true,
       status: 'rejected',
-      estimatedCost: '2000-3000€',
-      createdAt: '2024-07-08',
-      rejectedReason: 'Budget zu hoch für dieses Jahr'
+      rejectedReason: 'Budget nicht verfügbar in diesem Jahr',
+      createdAt: '2024-06-20',
+      isNew: false,
+      viewedBy: { [user?.id || '']: '2024-06-20T09:00:00' }
     }
   ])
 
   const [showCreateForm, setShowCreateForm] = useState(false)
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [categoryFilter, setCategoryFilter] = useState('Alle')
   const [newWishlistItem, setNewWishlistItem] = useState({
     title: '',
     description: '',
-    category: 'Allgemein',
+    category: 'Büro',
     estimatedCost: ''
   })
-  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'fulfilled' | 'rejected'>('all')
 
-  const categories = ['Allgemein', 'Küche', 'Büro', 'Freizeit', 'Komfort', 'Technik']
+  const categories = ['Alle', 'Küche', 'Büro', 'Freizeit', 'Technik', 'Transport', 'Sonstiges']
+  const statuses = [
+    { key: 'all', label: 'Alle' },
+    { key: 'pending', label: 'Ausstehend' },
+    { key: 'approved', label: 'Genehmigt' },
+    { key: 'fulfilled', label: 'Erfüllt' },
+    { key: 'rejected', label: 'Abgelehnt' }
+  ]
+
+  const handleCreateWishlistItem = async () => {
+    if (newWishlistItem.title.trim() && newWishlistItem.description.trim()) {
+      const wishlistItem: WishlistItem = {
+        id: Date.now().toString(),
+        title: newWishlistItem.title,
+        description: newWishlistItem.description,
+        category: newWishlistItem.category,
+        author: user?.firstName + ' ' + user?.lastName || 'Unbekannt',
+        upvotes: 0,
+        hasUserVoted: false,
+        status: 'pending',
+        estimatedCost: newWishlistItem.estimatedCost,
+        createdAt: new Date().toISOString().split('T')[0],
+        isNew: true,
+        viewedBy: { [user?.id || '']: new Date().toISOString() } // Creator has already viewed it
+      }
+      setWishlistItems([wishlistItem, ...wishlistItems])
+      setNewWishlistItem({ title: '', description: '', category: 'Büro', estimatedCost: '' })
+      setShowCreateForm(false)
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+  }
+
+  const markWishlistItemAsViewed = (itemId: string) => {
+    if (!user) return
+    
+    setWishlistItems(prev => prev.map(item => 
+      item.id === itemId 
+        ? { 
+            ...item, 
+            isNew: false,
+            viewedBy: { ...item.viewedBy, [user.id]: new Date().toISOString() }
+          }
+        : item
+    ))
+  }
 
   const handleVote = (id: string) => {
     setWishlistItems(wishlistItems.map(item => {
@@ -106,24 +167,10 @@ export default function Wishlist() {
     }))
   }
 
-  const handleCreateWishlistItem = () => {
-    if (newWishlistItem.title.trim() && newWishlistItem.description.trim()) {
-      const wishlistItem: WishlistItem = {
-        id: Date.now().toString(),
-        title: newWishlistItem.title,
-        description: newWishlistItem.description,
-        category: newWishlistItem.category,
-        author: 'Du',
-        upvotes: 0,
-        hasUserVoted: false,
-        status: 'pending',
-        estimatedCost: newWishlistItem.estimatedCost || undefined,
-        createdAt: new Date().toISOString().split('T')[0]
-      }
-      setWishlistItems([wishlistItem, ...wishlistItems])
-      setNewWishlistItem({ title: '', description: '', category: 'Allgemein', estimatedCost: '' })
-      setShowCreateForm(false)
-    }
+  const isWishlistItemNew = (item: WishlistItem) => {
+    if (!user) return false
+    const lastViewed = item.viewedBy[user.id]
+    return item.isNew && !lastViewed
   }
 
   const getStatusColor = (status: string) => {
@@ -157,15 +204,20 @@ export default function Wishlist() {
     }
   }
 
-  const filteredItems = statusFilter === 'all' 
-    ? wishlistItems 
-    : wishlistItems.filter(item => item.status === statusFilter)
+  const filteredItems = wishlistItems
+    .filter(item => statusFilter === 'all' || item.status === statusFilter)
+    .filter(item => categoryFilter === 'Alle' || item.category === categoryFilter)
 
   const sortedItems = filteredItems.sort((a, b) => {
-    // Sort by status priority first, then by upvotes
-    const statusPriority = { 'pending': 1, 'approved': 2, 'fulfilled': 3, 'rejected': 4 }
-    const statusDiff = statusPriority[a.status] - statusPriority[b.status]
-    if (statusDiff !== 0) return statusDiff
+    // Sort new items first
+    const aIsNew = isWishlistItemNew(a)
+    const bIsNew = isWishlistItemNew(b)
+    
+    if (aIsNew !== bIsNew) {
+      return aIsNew ? -1 : 1
+    }
+    
+    // Then sort by votes
     return b.upvotes - a.upvotes
   })
 
@@ -173,87 +225,93 @@ export default function Wishlist() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-neutral-800 dark:text-neutral-200 mb-2">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-2">
             Wunschliste
           </h1>
-          <p className="text-neutral-600 dark:text-neutral-400">
+          <p className="text-gray-600 dark:text-gray-400">
             Schlage Verbesserungen vor und stimme für die besten Ideen ab
           </p>
         </div>
-        <button
-          onClick={() => setShowCreateForm(!showCreateForm)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        <Button
+          onClick={async () => {
+            setShowCreateForm(!showCreateForm)
+            await new Promise(resolve => setTimeout(resolve, 300))
+          }}
+          variant="small"
+          className="bg-blue-600 hover:bg-blue-700 hover:ring-blue-500"
         >
-          <IconPlus className="h-4 w-4" />
+          <IconPlus className="h-4 w-4 mr-2" />
           Wunsch hinzufügen
-        </button>
+        </Button>
       </div>
 
       {/* Create Wishlist Item Form */}
       {showCreateForm && (
-        <div className="p-6 rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
-          <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-4">
+        <div className="p-6 rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
             Neuen Wunsch hinzufügen
           </h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Titel
               </label>
               <input
                 type="text"
                 value={newWishlistItem.title}
                 onChange={(e) => setNewWishlistItem({...newWishlistItem, title: e.target.value})}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-md dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                 placeholder="Was wünschst du dir?"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Kategorie
+              </label>
+              <select
+                value={newWishlistItem.category}
+                onChange={(e) => setNewWishlistItem({...newWishlistItem, category: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+              >
+                {categories.filter(cat => cat !== 'Alle').map(category => (
+                  <option key={category} value={category}>{category}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Geschätzte Kosten (optional)
+              </label>
+              <input
+                type="text"
+                value={newWishlistItem.estimatedCost}
+                onChange={(e) => setNewWishlistItem({...newWishlistItem, estimatedCost: e.target.value})}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
+                placeholder="z.B. 100-200€"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Beschreibung
               </label>
               <textarea
                 value={newWishlistItem.description}
                 onChange={(e) => setNewWishlistItem({...newWishlistItem, description: e.target.value})}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-md dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 h-24 resize-none"
-                placeholder="Beschreibe deinen Wunsch detailliert..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 h-32 resize-none"
+                placeholder="Warum ist das wichtig? Wie würde es helfen?"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                  Kategorie
-                </label>
-                <select
-                  value={newWishlistItem.category}
-                  onChange={(e) => setNewWishlistItem({...newWishlistItem, category: e.target.value})}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-md dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200"
-                >
-                  {categories.map(category => (
-                    <option key={category} value={category}>{category}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                  Geschätzte Kosten (optional)
-                </label>
-                <input
-                  type="text"
-                  value={newWishlistItem.estimatedCost}
-                  onChange={(e) => setNewWishlistItem({...newWishlistItem, estimatedCost: e.target.value})}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-md dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200"
-                  placeholder="z.B. 100-200€"
-                />
-              </div>
-            </div>
             <div className="flex gap-2">
-              <button
-                onClick={handleCreateWishlistItem}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              <Button
+                onClick={async () => {
+                  await handleCreateWishlistItem()
+                }}
+                variant="small"
+                className="bg-green-600 hover:bg-green-700 hover:ring-green-500"
+                disabled={!newWishlistItem.title || !newWishlistItem.description}
               >
                 Wunsch hinzufügen
-              </button>
+              </Button>
               <button
                 onClick={() => setShowCreateForm(false)}
                 className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
@@ -265,100 +323,108 @@ export default function Wishlist() {
         </div>
       )}
 
-      {/* Status Filter */}
-      <div className="flex flex-wrap gap-2">
-        {[
-          { key: 'all', label: 'Alle' },
-          { key: 'pending', label: 'Ausstehend' },
-          { key: 'approved', label: 'Genehmigt' },
-          { key: 'fulfilled', label: 'Erfüllt' },
-          { key: 'rejected', label: 'Abgelehnt' }
-        ].map(status => (
-          <button
-            key={status.key}
-            onClick={() => setStatusFilter(status.key as any)}
-            className={`px-4 py-2 rounded-lg transition-colors ${
-              statusFilter === status.key
-                ? 'bg-blue-600 text-white'
-                : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-600'
-            }`}
-          >
-            {status.label}
-          </button>
-        ))}
-      </div>
+      {/* Filters */}
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-wrap gap-2">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Status:</span>
+          {statuses.map(status => (
+            <button
+              key={status.key}
+              onClick={() => setStatusFilter(status.key)}
+              className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                statusFilter === status.key
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600'
+              }`}
+            >
+              {status.label}
+            </button>
+          ))}
+        </div>
 
-      {/* Statistics */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { label: 'Ausstehend', count: wishlistItems.filter(item => item.status === 'pending').length, color: 'bg-yellow-100 dark:bg-yellow-900' },
-          { label: 'Genehmigt', count: wishlistItems.filter(item => item.status === 'approved').length, color: 'bg-blue-100 dark:bg-blue-900' },
-          { label: 'Erfüllt', count: wishlistItems.filter(item => item.status === 'fulfilled').length, color: 'bg-green-100 dark:bg-green-900' },
-          { label: 'Abgelehnt', count: wishlistItems.filter(item => item.status === 'rejected').length, color: 'bg-red-100 dark:bg-red-900' }
-        ].map(stat => (
-          <div key={stat.label} className={`p-4 rounded-lg ${stat.color}`}>
-            <div className="text-2xl font-bold text-neutral-800 dark:text-neutral-200">{stat.count}</div>
-            <div className="text-sm text-neutral-600 dark:text-neutral-400">{stat.label}</div>
-          </div>
-        ))}
+        <div className="flex flex-wrap gap-2">
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Kategorie:</span>
+          {categories.map(category => (
+            <button
+              key={category}
+              onClick={() => setCategoryFilter(category)}
+              className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                categoryFilter === category
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-600'
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Wishlist Items */}
       <div className="space-y-4">
         {sortedItems.map(item => (
-          <div key={item.id} className="p-6 rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
+          <div 
+            key={item.id} 
+            className="p-6 rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => markWishlistItemAsViewed(item.id)}
+          >
             <div className="flex justify-between items-start mb-4">
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-neutral-600 dark:text-neutral-400 mb-3">
-                  {item.description}
-                </p>
-                <div className="flex items-center gap-4 text-sm text-neutral-600 dark:text-neutral-400 mb-3">
-                  <span className="flex items-center gap-1">
-                    <IconUser className="h-4 w-4" />
-                    {item.author}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <IconCalendar className="h-4 w-4" />
-                    {new Date(item.createdAt).toLocaleDateString('de-DE')}
-                  </span>
-                  {item.estimatedCost && (
-                    <span className="flex items-center gap-1">
-                      <IconShoppingCart className="h-4 w-4" />
-                      {item.estimatedCost}
-                    </span>
+                <div className="flex items-center gap-2 mb-2">
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                    {item.title}
+                  </h3>
+                  {isWishlistItemNew(item) && (
+                    <span className="px-2 py-1 bg-red-500 text-white text-xs rounded-full">NEU</span>
                   )}
-                </div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className={`px-2 py-1 rounded text-xs ${getCategoryColor(item.category)}`}>
-                    {item.category}
-                  </span>
                   <span className={`px-2 py-1 rounded text-xs ${getStatusColor(item.status)}`}>
                     {getStatusLabel(item.status)}
                   </span>
+                  <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded">
+                    {item.category}
+                  </span>
                 </div>
+                <p className="text-gray-600 dark:text-gray-400 mb-3">{item.description}</p>
+                
+                                 <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300 mb-2">
+                   <span>Von: {item.author}</span>
+                   <span>{item.createdAt}</span>
+                  {item.estimatedCost && (
+                    <span>Kosten: {item.estimatedCost}</span>
+                  )}
+                  {Object.keys(item.viewedBy).length > 0 && (
+                    <span className="flex items-center gap-1">
+                      <IconEye className="h-4 w-4" />
+                      Gesehen von: {Object.keys(item.viewedBy).length} Person(en)
+                    </span>
+                  )}
+                </div>
+
                 {item.status === 'fulfilled' && item.fulfilledAt && (
-                  <div className="flex items-center gap-1 text-sm text-green-600 dark:text-green-400">
-                    <IconCheck className="h-4 w-4" />
-                    Erfüllt am {new Date(item.fulfilledAt).toLocaleDateString('de-DE')}
+                  <div className="text-sm text-green-600 dark:text-green-400 mb-2">
+                    <IconCheck className="h-4 w-4 inline mr-1" />
+                    Erfüllt am: {item.fulfilledAt}
                   </div>
                 )}
+
                 {item.status === 'rejected' && item.rejectedReason && (
-                  <div className="flex items-center gap-1 text-sm text-red-600 dark:text-red-400">
-                    <IconX className="h-4 w-4" />
-                    Grund: {item.rejectedReason}
+                  <div className="text-sm text-red-600 dark:text-red-400 mb-2">
+                    <IconX className="h-4 w-4 inline mr-1" />
+                    Grund der Ablehnung: {item.rejectedReason}
                   </div>
                 )}
               </div>
-              <div className="flex items-center gap-2">
+
+              <div className="flex items-center gap-2 ml-4">
                 <button
-                  onClick={() => handleVote(item.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleVote(item.id)
+                  }}
+                  className={`flex items-center gap-1 px-3 py-1 rounded-lg transition-colors ${
                     item.hasUserVoted
                       ? 'bg-red-600 text-white'
-                      : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-red-50 dark:hover:bg-red-900/20'
+                      : 'bg-gray-200 dark:bg-gray-700 hover:bg-red-500 hover:text-white'
                   }`}
                   disabled={item.status === 'fulfilled' || item.status === 'rejected'}
                 >

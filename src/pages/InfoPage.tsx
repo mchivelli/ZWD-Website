@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button } from '@/components/ui/stateful-button'
 import { IconEdit, IconDeviceFloppy, IconX } from '@tabler/icons-react'
 
 export default function InfoPage() {
@@ -24,10 +25,10 @@ export default function InfoPage() {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-neutral-800 dark:text-neutral-200 mb-2">
+          <h1 className="text-3xl font-bold text-foreground mb-2">
             Informationen
           </h1>
-          <p className="text-neutral-600 dark:text-neutral-400">
+          <p className="text-muted-foreground">
             Kontaktdaten und Dienstplan verwalten
           </p>
         </div>
@@ -51,13 +52,13 @@ export default function InfoPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Contact Information */}
-        <div className="p-6 rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
-          <h2 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200 mb-4">
+        <div className="p-6 rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
             Kontaktinformationen
           </h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Telefon
               </label>
               {isEditing ? (
@@ -65,14 +66,14 @@ export default function InfoPage() {
                   type="text"
                   value={contactInfo.phone}
                   onChange={(e) => setContactInfo({...contactInfo, phone: e.target.value})}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-md dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                 />
               ) : (
-                <p className="text-neutral-600 dark:text-neutral-400">{contactInfo.phone}</p>
+                <p className="text-gray-600 dark:text-gray-400">{contactInfo.phone}</p>
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 E-Mail
               </label>
               {isEditing ? (
@@ -80,14 +81,14 @@ export default function InfoPage() {
                   type="email"
                   value={contactInfo.email}
                   onChange={(e) => setContactInfo({...contactInfo, email: e.target.value})}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-md dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                 />
               ) : (
-                <p className="text-neutral-600 dark:text-neutral-400">{contactInfo.email}</p>
+                <p className="text-gray-600 dark:text-gray-400">{contactInfo.email}</p>
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Adresse
               </label>
               {isEditing ? (
@@ -95,14 +96,14 @@ export default function InfoPage() {
                   type="text"
                   value={contactInfo.address}
                   onChange={(e) => setContactInfo({...contactInfo, address: e.target.value})}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-md dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                 />
               ) : (
-                <p className="text-neutral-600 dark:text-neutral-400">{contactInfo.address}</p>
+                <p className="text-gray-600 dark:text-gray-400">{contactInfo.address}</p>
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Notfall-Telefon
               </label>
               {isEditing ? (
@@ -110,27 +111,27 @@ export default function InfoPage() {
                   type="text"
                   value={contactInfo.emergencyPhone}
                   onChange={(e) => setContactInfo({...contactInfo, emergencyPhone: e.target.value})}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-md dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                 />
               ) : (
-                <p className="text-neutral-600 dark:text-neutral-400">{contactInfo.emergencyPhone}</p>
+                <p className="text-gray-600 dark:text-gray-400">{contactInfo.emergencyPhone}</p>
               )}
             </div>
           </div>
         </div>
 
         {/* Schedule */}
-        <div className="p-6 rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
-          <h2 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200 mb-4">
+        <div className="p-6 rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
             Dienstplan (Zeitplan)
           </h2>
           <div className="space-y-3">
             {schedule.map((day, idx) => (
-              <div key={idx} className="grid grid-cols-3 gap-4 py-2 border-b border-neutral-200 dark:border-neutral-700 last:border-b-0">
-                <div className="font-medium text-neutral-700 dark:text-neutral-300">
+              <div key={idx} className="grid grid-cols-3 gap-4 py-2 border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+                <div className="font-medium text-gray-700 dark:text-gray-300">
                   {day.day}
                 </div>
-                <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
                   {isEditing ? (
                     <input
                       type="text"
@@ -140,13 +141,13 @@ export default function InfoPage() {
                         newSchedule[idx].morning = e.target.value
                         setSchedule(newSchedule)
                       }}
-                      className="w-full px-2 py-1 border border-neutral-300 rounded dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200"
+                      className="w-full px-2 py-1 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                     />
                   ) : (
                     day.morning
                   )}
                 </div>
-                <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
                   {isEditing ? (
                     <input
                       type="text"
@@ -156,7 +157,7 @@ export default function InfoPage() {
                         newSchedule[idx].afternoon = e.target.value
                         setSchedule(newSchedule)
                       }}
-                      className="w-full px-2 py-1 border border-neutral-300 rounded dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200"
+                      className="w-full px-2 py-1 border border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200"
                     />
                   ) : (
                     day.afternoon
@@ -167,23 +168,30 @@ export default function InfoPage() {
           </div>
           
           {isEditing && (
-            <button
-              onClick={() => setIsEditing(false)}
-              className="mt-4 flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-            >
-              <IconDeviceFloppy className="h-4 w-4" />
-              Speichern
-            </button>
+            <div className="mt-4">
+              <Button
+                onClick={async () => {
+                  // Simulate save operation
+                  await new Promise(resolve => setTimeout(resolve, 1000))
+                  setIsEditing(false)
+                }}
+                variant="small"
+                className="bg-green-600 hover:bg-green-700 hover:ring-green-500"
+              >
+                <IconDeviceFloppy className="h-4 w-4 mr-2" />
+                Speichern
+              </Button>
+            </div>
           )}
         </div>
       </div>
 
       {/* Additional Information */}
-      <div className="p-6 rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800">
-        <h2 className="text-xl font-semibold text-neutral-800 dark:text-neutral-200 mb-4">
+      <div className="p-6 rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
           Wichtige Hinweise
         </h2>
-        <div className="space-y-4 text-neutral-600 dark:text-neutral-400">
+        <div className="space-y-4 text-gray-600 dark:text-gray-400">
           <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500">
             <h3 className="font-medium text-blue-800 dark:text-blue-200 mb-2">Arbeitszeiten</h3>
             <p>Bitte halte die angegebenen Arbeitszeiten ein. Bei Verspätungen oder Abwesenheiten melde dich frühzeitig.</p>
