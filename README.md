@@ -34,8 +34,8 @@ Modern web portal for Zivildienst management, built with React, TypeScript, and 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/zivildienst-portal.git
-   cd zivildienst-portal
+   git clone https://github.com/mchivelli/ZWD-Website.git
+   cd ZWD-Website
    ```
 
 2. Install dependencies:
